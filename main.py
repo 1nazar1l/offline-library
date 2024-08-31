@@ -33,6 +33,7 @@ for id in range(10):
         id += 1
         url = f'https://tululu.org/txt.php?id={id}'
         title = get_title(id)
-        download_txt(url, title)
+        filename = f'{id}. {title}'
+        download_txt(url, filename)
     except requests.HTTPError:
         print('Not found book')
