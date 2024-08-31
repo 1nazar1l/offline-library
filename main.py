@@ -3,6 +3,7 @@ import os
 from pathvalidate import sanitize_filename
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+import argparse
 
 
 def check_for_redirect(response):
@@ -76,8 +77,11 @@ def parse_book_page(soup):
 
     return book
 
-
-for id in range(10):
+parser = argparse.ArgumentParser(description="Скачивает книги и информацию о них")
+parser.add_argument('--start_id', type=int, default="0", help='Введите с какого id начать скачивать книги:')
+parser.add_argument('--end_id', type=int, default="10", help='Введите каким id закончить скачивание книг:')
+args = parser.parse_args()
+for id in range(args.start_id, args.end_id):
     try:
         id += 1
 
