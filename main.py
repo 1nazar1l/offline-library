@@ -66,6 +66,20 @@ def get_comments(url):
     else:
         print("No comments")
 
+def get_genre(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    check_for_redirect(response)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    genres = soup.find('span', class_ = 'd_book').find_all('a')
+    # print(genres)
+    if genres:
+        for genre in genres:
+            genre_text = genre.text
+            print(genre_text)
+    else:
+        print("No genres")
+
 for id in range(10):
     try:
         id += 1
@@ -78,6 +92,7 @@ for id in range(10):
         url = f'https://tululu.org/b{id}/'
         filename = f'{id}'
         # download_image(url, filename)
-        get_comments(url)
+        # get_comments(url)
+        get_genre(url)
     except requests.HTTPError:
         print('Not found book')
