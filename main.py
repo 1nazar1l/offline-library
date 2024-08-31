@@ -52,6 +52,20 @@ def download_image(url, filename, folder="images/"):
         f.write(response.content)
 
 
+def get_comments(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    check_for_redirect(response)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    comments = soup.find_all(class_ = 'texts')
+    if comments:
+        for comment in comments:
+            comment = comment.find('span')
+            comment_text = comment.text
+            print(comment_text)
+    else:
+        print("No comments")
+
 for id in range(10):
     try:
         id += 1
@@ -59,11 +73,11 @@ for id in range(10):
         url = f'https://tululu.org/txt.php?id={id}'
         title = get_title(id)
         filename = f'{id}. {title}'
-        download_txt(url, filename)
+        # download_txt(url, filename)
 
         url = f'https://tululu.org/b{id}/'
         filename = f'{id}'
-        download_image(url, filename)
-        
+        # download_image(url, filename)
+        get_comments(url)
     except requests.HTTPError:
         print('Not found book')
