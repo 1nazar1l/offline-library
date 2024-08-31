@@ -94,6 +94,8 @@ def main():
             check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'html.parser')
             book = parse_book_page(soup)
+            print('Название: ', book['title'])
+            print('Автор:', book['author'])
 
             filename = f'{id}'
             download_image(filename, soup)
