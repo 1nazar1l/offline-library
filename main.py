@@ -4,6 +4,7 @@ from pathvalidate import sanitize_filename
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import argparse
+import time
 
 
 def check_for_redirect(response):
@@ -108,6 +109,10 @@ def main():
 
         except requests.HTTPError:
             print('Not found book')
+
+        except requests.ConnectionError:
+            time.sleep(50)
+            print("Not connection, please wait")
 
 
 if __name__ == '__main__':
