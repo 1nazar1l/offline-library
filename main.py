@@ -56,18 +56,12 @@ def parse_book_page(soup):
     author = main_info[1].replace(u'\xa0', u' ').strip()
 
     genres_block = soup.find('span', class_ = 'd_book').find_all('a')
-    correct_genres = []
-    for genre in genres_block:
-        genre_text = genre.text
-        correct_genres.append(genre_text)
+    correct_genres = [genre.text for genre in genres_block]
 
     comments_block = soup.find_all(class_ = 'texts')
-    correct_comments = []
     if comments_block:
-        for comment in comments_block:
-            comment = comment.find('span')
-            comment_text = comment.text
-            correct_comments.append(comment_text)
+        correct_comments = [comment.find('span').text for comment in comments_block]
+
 
     book = {
         'title': title,
