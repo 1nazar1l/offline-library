@@ -37,7 +37,6 @@ def download_image(filename, img_url, folder="images/"):
     if 'nopic' in img_url:
         filename = 'nopic'
 
-    img_url = urljoin('https://tululu.org/', img_url)
     response = requests.get(img_url)
     response.raise_for_status()
     
@@ -93,6 +92,7 @@ def main():
             print('Автор:', book['author'])
 
             img_url = book['img_url']
+            img_url = urljoin(url, img_url)
             filename = f'{book_id}'
             download_image(filename, img_url)
 
