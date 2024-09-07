@@ -31,10 +31,9 @@ def download_txt(url, filename, folder="books/"):
         f.write(response.text)
 
 
-def download_image(filename, soup, folder="images/"):
+def download_image(filename, img_url, folder="images/"):
     os.makedirs("images", exist_ok=True)
 
-    img_url = soup.find(class_='bookimage').find('img')['src']
     if 'nopic' in img_url:
         filename = 'nopic'
 
@@ -62,12 +61,15 @@ def parse_book_page(soup):
     if comments:
         comments = [comment.find('span').text for comment in comments]
 
+    img_url = soup.find(class_='bookimage').find('img')['src']
+
 
     book = {
         'title': title,
         'author': author,
         'genres': genres,
-        'comments': comments
+        'comments': comments,
+        'img_url': img_url
     }
 
     return book
@@ -90,8 +92,9 @@ def main():
             print('Название: ', book['title'])
             print('Автор:', book['author'])
 
+            img_url = book['img_url']
             filename = f'{book_id}'
-            download_image(filename, soup)
+            download_image(filename, img_url)
 
             title = get_title(soup)
             url = f'https://tululu.org/txt.php?id={book_id}'
