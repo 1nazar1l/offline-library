@@ -84,11 +84,11 @@ def main():
     parser.add_argument('--end_id', type=int, default="10", help='Введите каким id закончить скачивание книг:')
     args = parser.parse_args()
 
-    for id in range(args.start_id, args.end_id):
+    for book_id in range(args.start_id, args.end_id):
         try:
-            id += 1
+            book_id += 1
 
-            url = f'https://tululu.org/b{id}/'
+            url = f'https://tululu.org/b{book_id}/'
             response = requests.get(url)
             response.raise_for_status()
             check_for_redirect(response)
@@ -97,12 +97,12 @@ def main():
             print('Название: ', book['title'])
             print('Автор:', book['author'])
 
-            filename = f'{id}'
+            filename = f'{book_id}'
             download_image(filename, soup)
 
             title = get_title(soup)
-            url = f'https://tululu.org/txt.php?id={id}'
-            filename = f'{id}. {title}'
+            url = f'https://tululu.org/txt.php?id={book_id}'
+            filename = f'{book_id}. {title}'
             download_txt(url, filename)
 
 
