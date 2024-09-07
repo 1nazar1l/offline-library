@@ -81,14 +81,12 @@ def parse_book_page(soup):
 
 def main():
     parser = argparse.ArgumentParser(description="Скачивает книги и информацию о них")
-    parser.add_argument('--start_id', type=int, default="0", help='Введите с какого id начать скачивать книги:')
+    parser.add_argument('--start_id', type=int, default="1", help='Введите с какого id начать скачивать книги:')
     parser.add_argument('--end_id', type=int, default="10", help='Введите каким id закончить скачивание книг:')
     args = parser.parse_args()
 
     for book_id in range(args.start_id, args.end_id):
         try:
-            book_id += 1
-
             url = f'https://tululu.org/b{book_id}/'
             response = requests.get(url)
             response.raise_for_status()
@@ -106,6 +104,7 @@ def main():
             filename = f'{book_id}. {title}'
             download_txt(url, filename)
 
+            book_id += 1
 
         except requests.HTTPError:
             print('Not found book')
