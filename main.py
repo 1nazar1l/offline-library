@@ -50,8 +50,8 @@ def download_image(filename, soup, folder="images/"):
 
 
 def parse_book_page(soup):
-    main_info_block = soup.find('h1').text
-    main_info = main_info_block.split(" :: ")
+    title_tag = soup.find('h1').text
+    main_info = title_tag.split(" :: ")
     title = main_info[0].replace(u'\xa0', u' ').strip()
     author = main_info[1].replace(u'\xa0', u' ').strip()
 
