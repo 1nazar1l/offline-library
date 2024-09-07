@@ -19,10 +19,10 @@ def get_title(soup):
     return title
 
 
-def download_txt(url, filename, folder="books/"):
+def download_txt(url, filename, params, folder="books/"):
     os.makedirs("books", exist_ok=True)
 
-    response = requests.get(url)
+    response = requests.get(url, params=params)
     response.raise_for_status() 
     check_for_redirect(response)
 
@@ -97,9 +97,10 @@ def main():
             download_image(filename, img_url)
 
             title = get_title(soup)
-            url = f'https://tululu.org/txt.php?id={book_id}'
+            params = {'id': {book_id}}
+            url = 'https://tululu.org/txt.php'
             filename = f'{book_id}. {title}'
-            download_txt(url, filename)
+            download_txt(url, filename, params)
 
             book_id += 1
 
