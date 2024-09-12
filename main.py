@@ -1,7 +1,8 @@
 import requests
+from bs4 import BeautifulSoup
+
 import os
 from pathvalidate import sanitize_filename
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import argparse
 import time

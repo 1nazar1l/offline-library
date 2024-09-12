@@ -1,4 +1,2 @@
 beautifulsoup4==4.12.3
-idna==3.8
-pathvalidate==3.2.1
-soupsieve==2.6
+requests==2.32.3
