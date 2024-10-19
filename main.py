@@ -13,19 +13,8 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
-def get_title(soup):
-    text = soup.find('h1').text
-    main_info = text.split(" :: ")
-    title = main_info[0].replace(u'\xa0', u' ').strip()
-    return title
-
-
-def download_txt(url, filename, params, folder="books/"):
+def download_txt(response, filename, folder="books/"):
     os.makedirs("books", exist_ok=True)
-
-    response = requests.get(url, params=params)
-    response.raise_for_status() 
-    check_for_redirect(response)
 
     filepath = os.path.join(f'{folder}{sanitize_filename(filename)}.txt')
     with open(filepath, 'w', encoding='UTF-8') as f:
@@ -40,8 +29,10 @@ def download_image(filename, img_url, folder="images/"):
 
     response = requests.get(img_url)
     response.raise_for_status()
+    # print(response)
     
     file_extension = os.path.splitext(img_url)[1]
+    # print(file_extension)
     filepath = os.path.join(f'{folder}{filename}{file_extension}')
 
     with open(filepath, 'wb') as f:
@@ -97,11 +88,14 @@ def main():
             filename = f'{book_id}'
             download_image(filename, img_url)
 
-            title = get_title(soup)
+            title = book['title']
             params = {'id': {book_id}}
             url = 'https://tululu.org/txt.php'
+            response = requests.get(url, params=params)
+            response.raise_for_status() 
+            check_for_redirect(response)
             filename = f'{book_id}. {title}'
-            download_txt(url, filename, params)
+            download_txt(response, filename)
 
             book_id += 1
 
