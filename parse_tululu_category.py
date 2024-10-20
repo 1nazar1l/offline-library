@@ -23,7 +23,8 @@ def download_dict(book):
         json.dump(books, f, ensure_ascii=False, indent=4)
 
 
-for page in range(1, 5):
+i = 1
+for page in range(1, 3):
     books_page_url = f'https://tululu.org/l55/{page}'
     response = requests.get(books_page_url)
     response.raise_for_status()
@@ -42,12 +43,14 @@ for page in range(1, 5):
             print('Название: ', book['title'])
             print('Автор:', book['author'])
             download_dict(book)
+            print("add_dict - OK")
 
             img_url = book['img_url']
             img_url = urljoin(url, img_url)
             book_id = book_id[1:]
             filename = f'{book_id}'
             download_image(filename, img_url)
+            print("Download img - OK")
 
             title = book['title']
             params = {'id': {book_id}}
@@ -57,6 +60,9 @@ for page in range(1, 5):
             check_for_redirect(response)
             filename = f'{book_id}. {title}'
             download_txt(response, filename)
+            print("Download text - OK")
+            print(i)
+            i +=1
 
         except requests.HTTPError:
             print('Not found book')
