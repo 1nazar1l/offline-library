@@ -57,14 +57,14 @@ def main():
                 print('Автор:', book['author'])
                 download_dict(book, root_folder)
 
-                if args.skip_imgs == "y" or args.skip_imgs == "д":
+                if args.skip_imgs == "n" or args.skip_imgs == "н":
                     img_url = book['img_url']
                     img_url = urljoin(url, img_url)
                     book_id = book_id[1:]
                     filename = f'{book_id}'
                     download_image(filename, img_url, root_folder)
 
-                if args.skip_txt == "y" or args.skip_txt == "д":
+                if args.skip_txt == "n" or args.skip_txt == "н":
                     title = book['title']
                     params = {'id': {book_id}}
                     url = 'https://tululu.org/txt.php'
