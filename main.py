@@ -45,17 +45,13 @@ def download_dict(book, root_folder):
     filepath = os.path.join(f'{sanitize_filename(root_folder)}/{filename}')
 
     if os.path.exists(filepath):
-            # Загружаем существующие данные
             with open(filepath, 'r', encoding='UTF8') as f:
                 books = json.load(f)
     else:
-        # Если файл не существует, создаем новый список
         books = []
 
-    # Добавляем новый элемент в список
     books.append(book)
 
-    # Сохраняем обновленный список обратно в файл
     with open(filepath, 'w', encoding='UTF8') as f:
         json.dump(books, f, ensure_ascii=False, indent=4)
 
