@@ -1,5 +1,5 @@
 /venv/
-/books/
+**/books/
 .gitattributes
-/images/
+**/images/
 *.json
