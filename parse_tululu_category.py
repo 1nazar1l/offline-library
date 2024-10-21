@@ -13,8 +13,8 @@ def main():
     parser.add_argument('--start_page', type=int, default="1", help='Введите с какой страницы начать скачивать книги:')
     parser.add_argument('--end_page', type=int, help='Введите какой страницей закончить скачивание книг:')
     parser.add_argument('--dest_folder', type=str,default="library",help='Укажите папку в которую будет сохраняться вся информация')
-    parser.add_argument('--skip_imgs', type=str,default="y",help="Укажите y/д чтобы скачивать картинки или n/н чтобы не скачивать")
-    parser.add_argument('--skip_txt', type=str,default="y",help="Укажите y/д чтобы скачивать текст или n/н чтобы не скачивать")
+    parser.add_argument('--skip_imgs', type=str,default="n",help="Укажите y/д чтобы скачивать картинки или n/н чтобы не скачивать")
+    parser.add_argument('--skip_txt', type=str,default="n",help="Укажите y/д чтобы скачивать текст или n/н чтобы не скачивать")
     args = parser.parse_args()
 
     root_folder = args.dest_folder
