@@ -17,7 +17,7 @@ pip install -r requirements.txt
 Для того чтобы скачивать книги по порядку нужно открыть терминал и написать:
 
 ```sh
-python main.py
+python parse_tutulu_books
 ```
 
 Чтобы скачать книги в определенном диапазоне нужно указать несколько значений:
@@ -28,7 +28,7 @@ python main.py
 Эти значения нужно указывать после запуска проекта:
 
 ```sh
-python main.py --start_id значение --end_id значение
+python parse_tutulu_books --start_id значение --end_id значение
 ```
 
 Чтобы скачать книги с жанром "фантастика" нужно открыть терминал и написать:
@@ -45,7 +45,7 @@ python parse_tululu_category.py
 Эти значения нужно указывать после запуска проекта:
 
 ```sh
-python main.py --start_page значение --end_page значение
+python parse_tutulu_books --start_page значение --end_page значение
 ```
 
 Также для более удобного скачивания можно указать несколько аргументов(аргументы доступны для обоих файлов):
@@ -60,7 +60,7 @@ python main.py --start_page значение --end_page значение
 
 Пример:
 ```sh
-python main.py --start_id 1 --end_id 5 --dest_folder books_library --skip_imgs y --skip_txt n
+python parse_tutulu_books --start_id 1 --end_id 5 --dest_folder books_library --skip_imgs y --skip_txt n
 ```
 ```sh
 python parse_tululu_category.py --start_page 12 --end_page 15 --dest_folder books_library --skip_imgs y --skip_txt y

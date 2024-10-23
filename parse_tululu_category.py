@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from urllib.parse import urljoin
-from main import download_txt, download_image, parse_book_page,check_for_redirect, download_dict
+from parse_tululu_books import download_txt, download_image, parse_book_page,check_for_redirect, download_dict
 import argparse
 import sys
 import time
