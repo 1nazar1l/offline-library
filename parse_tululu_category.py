@@ -31,56 +31,57 @@ def main():
         end_page = args.end_page
 
     for page in range(args.start_page, end_page):
-            print('ok')
-        # books_page_url = f'https://tululu.org/l55/{page}'
-        # response = requests.get(books_page_url)
-        # response.raise_for_status()
+        try:
+            books_page_url = f'https://tululu.org/l55/{page}'
+            response = requests.get(books_page_url)
+            response.raise_for_status()
+            check_for_redirect(response)
 
-        # soup = BeautifulSoup(response.text, 'html.parser')
-        # selector = ".d_book"
-        # books = soup.select(selector)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            selector = ".d_book"
+            books = soup.select(selector)
 
-        # for book in books:
-        #     try:
-        #         book_id = book.a["href"]
-        #         book_id = book_id.split("/")[1]
-        #         url = 'https://tululu.org'
-        #         book_url = urljoin(url,book_id)
-        #         print(book_url)
+            for book in books:
+                book_id = book.a["href"]
+                book_id = book_id.split("/")[1]
+                url = 'https://tululu.org'
+                book_url = urljoin(url,book_id)
+                print(book_url)
 
-        #         response = requests.get(book_url)
-        #         response.raise_for_status()
+                response = requests.get(book_url)
+                response.raise_for_status()
+                check_for_redirect(response)
 
-        #         soup = BeautifulSoup(response.text, 'html.parser')
-        #         book = parse_book_page(soup)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                book = parse_book_page(soup)
 
-        #         print('Название: ', book['title'])
-        #         print('Автор:', book['author'])
-        #         download_dict(book, root_folder)
+                print('Название: ', book['title'])
+                print('Автор:', book['author'])
+                download_dict(book, root_folder)
 
-        #         if not args.skip_imgs:
-        #             img_url = book['img_url']
-        #             img_url = urljoin(url, img_url)
-        #             book_id = book_id[1:]
-        #             filename = f'{book_id}'
-        #             download_image(filename, img_url, root_folder)
+                if not args.skip_imgs:
+                    img_url = book['img_url']
+                    img_url = urljoin(url, img_url)
+                    book_id = book_id[1:]
+                    filename = f'{book_id}'
+                    download_image(filename, img_url, root_folder)
 
-        #         if not args.skip_txt:
-        #             title = book['title']
-        #             params = {'id': {book_id}}
-        #             url = 'https://tululu.org/txt.php'
-        #             response = requests.get(url, params=params)
-        #             response.raise_for_status() 
-        #             check_for_redirect(response)
-        #             filename = f'{book_id}. {title}'
-        #             download_txt(response, filename, root_folder)
-# 
-            # except requests.HTTPError:
-            #     print('Not found book')
+                if not args.skip_txt:
+                    title = book['title']
+                    params = {'id': {book_id}}
+                    url = 'https://tululu.org/txt.php'
+                    response = requests.get(url, params=params)
+                    response.raise_for_status() 
+                    check_for_redirect(response)
+                    filename = f'{book_id}. {title}'
+                    download_txt(response, filename, root_folder)
 
-            # except requests.ConnectionError:
-            #     time.sleep(50)
-            #     print("Not connection, please wait")
+        except requests.HTTPError:
+            print('Not found book')
+
+        except requests.ConnectionError:
+            time.sleep(5)
+            print("Not connection, please wait")
 
 if __name__ == "__main__":
     main()
