@@ -45,7 +45,7 @@ python parse_tululu_category.py
 Эти значения нужно указывать после запуска проекта:
 
 ```sh
-python parse_tululu_books.py --start_page значение --end_page значение
+python parse_tululu_category.py --start_page значение --end_page значение
 ```
 
 Также для более удобного скачивания можно указать несколько аргументов(аргументы доступны для обоих файлов):
