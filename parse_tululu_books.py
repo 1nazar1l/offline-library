@@ -8,7 +8,6 @@ import argparse
 import time
 import json
 
-
 def check_for_redirect(response):
     if response.history:
         raise requests.HTTPError
@@ -38,19 +37,11 @@ def download_image(filename, img_url, root_folder, folder="images/"):
         f.write(response.content)
 
 
-def download_dict(book, root_folder):
+def download_dict(books, root_folder):
     os.makedirs(sanitize_filename(root_folder), exist_ok=True)
 
     filename = "books_dict.json"
     filepath = os.path.join(f'{sanitize_filename(root_folder)}/{filename}')
-
-    if os.path.exists(filepath):
-            with open(filepath, 'r', encoding='UTF8') as f:
-                books = json.load(f)
-    else:
-        books = []
-
-    books.append(book)
 
     with open(filepath, 'w', encoding='UTF8') as f:
         json.dump(books, f, ensure_ascii=False, indent=4)
@@ -89,10 +80,11 @@ def main():
     parser.add_argument('--skip_imgs', help="Укажите это значение чтобы пропустить скачивание картинок", action='store_true')
     parser.add_argument('--skip_txt', help="Укажите это значение чтобы пропустить скачивание текста", action='store_true')
     args = parser.parse_args()
+    books = []
+    root_folder = args.dest_folder
 
     for book_id in range(args.start_id, args.end_id):
         try:
-            root_folder = args.dest_folder
 
             url = f'https://tululu.org/b{book_id}/'
             response = requests.get(url)
@@ -102,7 +94,7 @@ def main():
             book = parse_book_page(soup)
             print('Название: ', book['title'])
             print('Автор:', book['author'])
-            download_dict(book, root_folder)
+            books.append(book)
 
             if not args.skip_imgs:
                 img_url = book['img_url']
@@ -126,9 +118,10 @@ def main():
             print('Not found book')
 
         except requests.ConnectionError:
-            time.sleep(50)
+            time.sleep(5)
             print("Not connection, please wait")
 
+    download_dict(books, root_folder)
 
 if __name__ == '__main__':
     main()

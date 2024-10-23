@@ -19,6 +19,7 @@ def main():
     args = parser.parse_args()
 
     root_folder = args.dest_folder
+    books_dict = []
 
     if args.start_page == 1 and not args.end_page:
         end_page = 5
@@ -52,10 +53,10 @@ def main():
 
                 soup = BeautifulSoup(response.text, 'html.parser')
                 book = parse_book_page(soup)
+                books_dict.append(book)
 
                 print('Название: ', book['title'])
                 print('Автор:', book['author'])
-                download_dict(book, root_folder)
 
                 if not args.skip_imgs:
                     img_url = book['img_url']
@@ -78,8 +79,10 @@ def main():
             print('Not found book')
 
         except requests.ConnectionError:
-            time.sleep(50)
+            time.sleep(5)
             print("Not connection, please wait")
+
+    download_dict(books_dict, root_folder)
 
 if __name__ == "__main__":
     main()
