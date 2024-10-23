@@ -6,6 +6,7 @@ from parse_tululu_books import download_txt, download_image, parse_book_page,che
 import argparse
 import sys
 import time
+import os
 
 
 def main():
@@ -36,17 +37,14 @@ def main():
             response = requests.get(books_page_url)
             response.raise_for_status()
             check_for_redirect(response)
-
             soup = BeautifulSoup(response.text, 'html.parser')
             selector = ".d_book"
             books = soup.select(selector)
-
             for book in books:
                 book_id = book.a["href"]
                 book_id = book_id.split("/")[1]
                 url = 'https://tululu.org'
-                book_url = urljoin(url,book_id)
-                print(book_url)
+                book_url = os.path.join(f'{url}{book_id}/')
 
                 response = requests.get(book_url)
                 response.raise_for_status()
@@ -80,7 +78,7 @@ def main():
             print('Not found book')
 
         except requests.ConnectionError:
-            time.sleep(5)
+            time.sleep(50)
             print("Not connection, please wait")
 
 if __name__ == "__main__":
