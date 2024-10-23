@@ -86,8 +86,8 @@ def main():
     parser.add_argument('--start_id', type=int, default="1", help='Введите с какого id начать скачивать книги:')
     parser.add_argument('--end_id', type=int, default="10", help='Введите каким id закончить скачивание книг:')
     parser.add_argument('--dest_folder', type=str,default="library",help='Укажите папку в которую будет сохраняться вся информация')
-    parser.add_argument('--skip_imgs', type=str,default="n",help="Укажите y/д чтобы скачивать картинки или n/н чтобы не скачивать")
-    parser.add_argument('--skip_txt', type=str,default="n",help="Укажите y/д чтобы скачивать текст или n/н чтобы не скачивать")
+    parser.add_argument('--skip_imgs', help="Укажите это значение чтобы пропустить скачивание картинок", action='store_true')
+    parser.add_argument('--skip_txt', help="Укажите это значение чтобы пропустить скачивание текста", action='store_true')
     args = parser.parse_args()
 
     for book_id in range(args.start_id, args.end_id):
@@ -104,13 +104,13 @@ def main():
             print('Автор:', book['author'])
             download_dict(book, root_folder)
 
-            if args.skip_imgs == "n" or args.skip_imgs == "н":
+            if not args.skip_imgs:
                 img_url = book['img_url']
                 img_url = urljoin(url, img_url)
                 filename = f'{book_id}'
                 download_image(filename, img_url, root_folder)
 
-            if args.skip_txt == "n" or args.skip_txt == "н":
+            if not args.skip_txt:
                 title = book['title']
                 params = {'id': {book_id}}
                 url = 'https://tululu.org/txt.php'

@@ -17,7 +17,7 @@ pip install -r requirements.txt
 Для того чтобы скачивать книги по порядку нужно открыть терминал и написать:
 
 ```sh
-python parse_tutulu_books
+python parse_tululu_books.py
 ```
 
 Чтобы скачать книги в определенном диапазоне нужно указать несколько значений:
@@ -28,7 +28,7 @@ python parse_tutulu_books
 Эти значения нужно указывать после запуска проекта:
 
 ```sh
-python parse_tutulu_books --start_id значение --end_id значение
+python parse_tululu_books.py --start_id значение --end_id значение
 ```
 
 Чтобы скачать книги с жанром "фантастика" нужно открыть терминал и написать:
@@ -45,25 +45,21 @@ python parse_tululu_category.py
 Эти значения нужно указывать после запуска проекта:
 
 ```sh
-python parse_tutulu_books --start_page значение --end_page значение
+python parse_tululu_books.py --start_page значение --end_page значение
 ```
 
 Также для более удобного скачивания можно указать несколько аргументов(аргументы доступны для обоих файлов):
 
 1. `DEST_FOLDER`: папка в которую нужно скачивать все файлы (по умолчанию library)
-1. `SKIP_IMGS`: Нужно ли скачивать картинки: 
-    1. n/н если нужно 
-    1. y/д если не нужно
-1. `SKIP_TXT`: Нужно ли скачивать текста:
-    1. n/н если нужно 
-    1. y/д если не нужно
+1. `SKIP_IMGS`: если указать это значение то картинки не будут скачиваться
+1. `SKIP_TXT`: если указать это значение то текст не будет скачиваться
 
 Пример:
 ```sh
-python parse_tutulu_books --start_id 1 --end_id 5 --dest_folder books_library --skip_imgs y --skip_txt n
+python parse_tululu_books.py --start_id 1 --end_id 5 --dest_folder books_library --skip_imgs 
 ```
 ```sh
-python parse_tululu_category.py --start_page 12 --end_page 15 --dest_folder books_library --skip_imgs y --skip_txt y
+python parse_tululu_category.py --start_page 12 --end_page 15 --dest_folder books_library --skip_imgs --skip_txt 
 ```
 
 ### Цель проекта
