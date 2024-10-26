@@ -8,7 +8,6 @@ import sys
 import time
 import os
 
-
 def main():
     parser = argparse.ArgumentParser(description="Скачивает книги определенного жанра и информацию о них")
     parser.add_argument('--start_page', type=int, default="1", help='Введите с какой страницы начать скачивать книги:')
@@ -42,41 +41,49 @@ def main():
             selector = ".d_book"
             books = soup.select(selector)
             for book in books:
-                book_id = book.a["href"]
-                book_id = book_id.split("/")[1]
-                url = 'https://tululu.org'
-                book_url = os.path.join(f'{url}{book_id}/')
+                try:
+                    book_id = book.a["href"]
+                    book_id = book_id.split("/")[1]
+                    url = 'https://tululu.org'
+                    book_url = os.path.join(f'{url}/{book_id}/')
 
-                response = requests.get(book_url)
-                response.raise_for_status()
-                check_for_redirect(response)
-
-                soup = BeautifulSoup(response.text, 'html.parser')
-                book = parse_book_page(soup)
-                all_books.append(book)
-
-                print('Название: ', book['title'])
-                print('Автор:', book['author'])
-
-                if not args.skip_imgs:
-                    img_url = book['img_url']
-                    img_url = urljoin(url, img_url)
-                    book_id = book_id[1:]
-                    filename = f'{book_id}'
-                    download_image(filename, img_url, root_folder)
-
-                if not args.skip_txt:
-                    title = book['title']
-                    params = {'id': {book_id}}
-                    url = 'https://tululu.org/txt.php'
-                    response = requests.get(url, params=params)
-                    response.raise_for_status() 
+                    response = requests.get(book_url)
+                    response.raise_for_status()
                     check_for_redirect(response)
-                    filename = f'{book_id}. {title}'
-                    download_txt(response, filename, root_folder)
+
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                    book = parse_book_page(soup)
+                    all_books.append(book)
+
+                    print('Название: ', book['title'])
+                    print('Автор:', book['author'])
+
+                    if not args.skip_imgs:
+                        img_url = book['img_url']
+                        img_url = urljoin(url, img_url)
+                        book_id = book_id[1:]
+                        filename = f'{book_id}'
+                        download_image(filename, img_url, root_folder)
+
+                    if not args.skip_txt:
+                        title = book['title']
+                        params = {'id': {book_id}}
+                        url = 'https://tululu.org/txt.php'
+                        response = requests.get(url, params=params)
+                        response.raise_for_status() 
+                        check_for_redirect(response)
+                        filename = f'{book_id}. {title}'
+                        download_txt(response, filename, root_folder)
+
+                except requests.HTTPError:
+                    print('Not found book')
+
+                except requests.ConnectionError:
+                    time.sleep(5)
+                    print("Not connection, please wait")
 
         except requests.HTTPError:
-            print('Not found book')
+            print('Not found page')
 
         except requests.ConnectionError:
             time.sleep(5)
