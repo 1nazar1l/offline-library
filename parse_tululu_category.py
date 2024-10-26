@@ -19,7 +19,7 @@ def main():
     args = parser.parse_args()
 
     root_folder = args.dest_folder
-    books_dict = []
+    all_books = []
 
     if args.start_page == 1 and not args.end_page:
         end_page = 5
@@ -53,7 +53,7 @@ def main():
 
                 soup = BeautifulSoup(response.text, 'html.parser')
                 book = parse_book_page(soup)
-                books_dict.append(book)
+                all_books.append(book)
 
                 print('Название: ', book['title'])
                 print('Автор:', book['author'])
@@ -82,7 +82,7 @@ def main():
             time.sleep(5)
             print("Not connection, please wait")
 
-    append_books_dict(books_dict, root_folder)
+    append_books_dict(all_books, root_folder)
 
 if __name__ == "__main__":
     main()
