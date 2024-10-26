@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from urllib.parse import urljoin
-from parse_tululu_books import download_txt, download_image, parse_book_page,check_for_redirect, append_books_dict
+from parse_tululu_books import download_txt, download_image, parse_book_page,check_for_redirect, get_all_books
 import argparse
 import sys
 import time
@@ -82,7 +82,7 @@ def main():
             time.sleep(5)
             print("Not connection, please wait")
 
-    append_books_dict(all_books, root_folder)
+    get_all_books(all_books, root_folder)
 
 if __name__ == "__main__":
     main()

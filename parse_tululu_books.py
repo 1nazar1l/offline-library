@@ -37,7 +37,7 @@ def download_image(filename, img_url, root_folder, folder="images/"):
         f.write(response.content)
 
 
-def append_books_dict(books, root_folder):
+def get_all_books(books, root_folder):
     os.makedirs(sanitize_filename(root_folder), exist_ok=True)
 
     filename = "books_dict.json"
@@ -121,7 +121,7 @@ def main():
             time.sleep(5)
             print("Not connection, please wait")
 
-    append_books_dict(books, root_folder)
+    get_all_books(books, root_folder)
 
 if __name__ == '__main__':
     main()
