@@ -66,7 +66,8 @@ def parse_book_page(soup):
         'author': author.strip(),
         'genres': genres,
         'comments': comments,
-        'img_url': img_url
+        'img_url': img_url,
+        'book_path': f"books/{title.strip()}.txt"
     }
 
     return book
@@ -94,7 +95,6 @@ def main():
             book = parse_book_page(soup)
             print('Название: ', book['title'])
             print('Автор:', book['author'])
-            books.append(book)
 
             if not args.skip_imgs:
                 img_url = book['img_url']
@@ -112,6 +112,10 @@ def main():
                 filename = f'{book_id}. {title}'
                 download_txt(response, filename, root_folder)
 
+
+            img_url = book["img_url"].split("/")[2]
+            book["img_url"] = urljoin('images/', img_url)
+            books.append(book)
             book_id += 1
 
         except requests.HTTPError:

@@ -30,7 +30,7 @@ def main():
         sys.exit(1)
     else:
         end_page = args.end_page
-
+        
     for page in range(args.start_page, end_page):
         try:
             books_page_url = f'https://tululu.org/l55/{page}'
@@ -40,8 +40,12 @@ def main():
             soup = BeautifulSoup(response.text, 'html.parser')
             selector = ".d_book"
             books = soup.select(selector)
+            elements_per_page = 0
             for book in books:
                 try:
+                    elements_per_page +=1
+                    if elements_per_page == 26:
+                        break
                     book_id = book.a["href"]
                     book_id = book_id.split("/")[1]
                     url = 'https://tululu.org'
@@ -74,6 +78,10 @@ def main():
                         check_for_redirect(response)
                         filename = f'{book_id}. {title}'
                         download_txt(response, filename, root_folder)
+
+                    img_url = book["img_url"].split("/")[2]
+                    book["img_url"] = urljoin('images/', img_url)
+                    books.append(book)
 
                 except requests.HTTPError:
                     print('Not found book')
