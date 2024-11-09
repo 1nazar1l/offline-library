@@ -30,7 +30,6 @@ def main():
         sys.exit(1)
     else:
         end_page = args.end_page
-        
     for page in range(args.start_page, end_page):
         try:
             books_page_url = f'https://tululu.org/l55/{page}'
@@ -56,7 +55,7 @@ def main():
                     check_for_redirect(response)
 
                     soup = BeautifulSoup(response.text, 'html.parser')
-                    book = parse_book_page(soup)
+                    book = parse_book_page(soup, book_id)
                     all_books.append(book)
 
                     print('Название: ', book['title'])
@@ -70,13 +69,12 @@ def main():
                         download_image(filename, img_url, root_folder)
 
                     if not args.skip_txt:
-                        title = book['title']
+                        filename = book['book_path'].strip("books/")
                         params = {'id': {book_id}}
                         url = 'https://tululu.org/txt.php'
                         response = requests.get(url, params=params)
                         response.raise_for_status() 
                         check_for_redirect(response)
-                        filename = f'{book_id}. {title}'
                         download_txt(response, filename, root_folder)
 
                     img_url = book["img_url"].split("/")[2]

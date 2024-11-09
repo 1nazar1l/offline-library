@@ -16,7 +16,7 @@ def check_for_redirect(response):
 def download_txt(response, filename, root_folder, folder="books/"):
     os.makedirs(f'{root_folder}/{folder}', exist_ok=True)
 
-    filepath = os.path.join(f'{sanitize_filename(root_folder)}/{folder}{sanitize_filename(filename)}.txt')
+    filepath = os.path.join(f'{sanitize_filename(root_folder)}/{folder}{sanitize_filename(filename)}')
     with open(filepath, 'w', encoding='UTF-8') as f:
         f.write(response.text)
 
@@ -47,7 +47,7 @@ def get_all_books(books, root_folder):
         json.dump(books, f, ensure_ascii=False, indent=4)
 
 
-def parse_book_page(soup):
+def parse_book_page(soup, book_id):
     title_tag = soup.h1.text.split(" :: ")
     title, author = title_tag
 
@@ -61,13 +61,17 @@ def parse_book_page(soup):
     selector = ".bookimage img"
     img_url = soup.select_one(selector)["src"]
 
+    if "b" in book_id:
+        book_id.replace("b", "")
+    book_path = f"books/{book_id}.{sanitize_filename(title.strip().replace(" ", "_"))}.txt"
+
     book = {
         'title': title.strip(),
         'author': author.strip(),
         'genres': genres,
         'comments': comments,
         'img_url': img_url,
-        'book_path': f"books/{title.strip()}.txt"
+        'book_path': book_path
     }
 
     return book
@@ -92,7 +96,7 @@ def main():
             response.raise_for_status()
             check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'html.parser')
-            book = parse_book_page(soup)
+            book = parse_book_page(soup, book_id)
             print('Название: ', book['title'])
             print('Автор:', book['author'])
 
@@ -103,13 +107,12 @@ def main():
                 download_image(filename, img_url, root_folder)
 
             if not args.skip_txt:
-                title = book['title']
+                filename = book['book_path'].strip("books/")
                 params = {'id': {book_id}}
                 url = 'https://tululu.org/txt.php'
                 response = requests.get(url, params=params)
                 response.raise_for_status() 
                 check_for_redirect(response)
-                filename = f'{book_id}. {title}'
                 download_txt(response, filename, root_folder)
 
 
