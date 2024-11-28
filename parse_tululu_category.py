@@ -56,30 +56,31 @@ def main():
 
                     soup = BeautifulSoup(response.text, 'html.parser')
                     book = parse_book_page(soup, book_id)
-                    all_books.append(book)
 
                     print('Название: ', book['title'])
                     print('Автор:', book['author'])
 
-                    if not args.skip_imgs:
-                        img_url = book['img_url']
-                        img_url = urljoin(url, img_url)
-                        book_id = book_id[1:]
-                        filename = f'{book_id}'
-                        download_image(filename, img_url, root_folder)
+                    book_id = book_id[1:]
 
                     if not args.skip_txt:
                         filename = book['book_path'].strip("books/")
                         params = {'id': {book_id}}
-                        url = 'https://tululu.org/txt.php'
-                        response = requests.get(url, params=params)
+                        book_text_url = 'https://tululu.org/txt.php'
+                        response = requests.get(book_text_url, params=params)
                         response.raise_for_status() 
                         check_for_redirect(response)
                         download_txt(response, filename, root_folder)
 
+                    if not args.skip_imgs:
+                        img_url = book['img_url']
+                        img_url = urljoin(url, img_url)
+                        filename = f'{book_id}'
+                        download_image(filename, img_url, root_folder)
+
                     img_url = book["img_url"].split("/")[2]
                     book["img_url"] = urljoin('images/', img_url)
-                    books.append(book)
+
+                    all_books.append(book)
 
                 except requests.HTTPError:
                     print('Not found book')

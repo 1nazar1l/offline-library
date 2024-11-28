@@ -60,9 +60,8 @@ def parse_book_page(soup, book_id):
 
     selector = ".bookimage img"
     img_url = soup.select_one(selector)["src"]
-
     if "b" in book_id:
-        book_id.replace("b", "")
+        book_id = book_id[1:]
     book_path = f"books/{book_id}.{sanitize_filename(title.strip().replace(" ", "_"))}.txt"
 
     book = {
@@ -100,12 +99,6 @@ def main():
             print('Название: ', book['title'])
             print('Автор:', book['author'])
 
-            if not args.skip_imgs:
-                img_url = book['img_url']
-                img_url = urljoin(url, img_url)
-                filename = f'{book_id}'
-                download_image(filename, img_url, root_folder)
-
             if not args.skip_txt:
                 filename = book['book_path'].strip("books/")
                 params = {'id': {book_id}}
@@ -114,6 +107,12 @@ def main():
                 response.raise_for_status() 
                 check_for_redirect(response)
                 download_txt(response, filename, root_folder)
+
+            if not args.skip_imgs:
+                img_url = book['img_url']
+                img_url = urljoin(url, img_url)
+                filename = f'{book_id}'
+                download_image(filename, img_url, root_folder)
 
 
             img_url = book["img_url"].split("/")[2]
